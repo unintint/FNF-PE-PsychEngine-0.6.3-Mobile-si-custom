@@ -53,7 +53,7 @@
     {
       "name": "lime",
       "type": "git",
-      "ref": "develop",
+      "ref": "main",
       "url": "https://github.com/mcagabe19-stuff/lime-8.2.1"
     },
     {
