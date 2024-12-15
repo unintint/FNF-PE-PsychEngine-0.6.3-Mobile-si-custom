@@ -399,7 +399,7 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camOther, false);
-		grpNoteSplashes = new FlxTypedGroup<NoteSplash>(8);
+		grpNoteSplashes = new FlxTypedGroup<NoteSplash>();
 
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 		CustomFadeTransition.nextCamera = camOther;
@@ -2915,7 +2915,7 @@ class PlayState extends MusicBeatState
 						var particle = phillyGlowParticles.members[i];
 						if(particle.alpha < 0)
 						{
-							//particle.kill();
+							particle.kill();
 							phillyGlowParticles.remove(particle, true);
 							particle.destroy();
 						}
@@ -2926,7 +2926,7 @@ class PlayState extends MusicBeatState
 				if(!ClientPrefs.lowQuality) {
 					grpLimoParticles.forEach(function(spr:BGSprite) {
 						if(spr.animation.curAnim.finished) {
-							//spr.kill();
+							spr.kill();
 							grpLimoParticles.remove(spr, true);
 							spr.destroy();
 						}
@@ -4231,14 +4231,14 @@ class PlayState extends MusicBeatState
 		}
 		if (!ClientPrefs.comboStacking)
 		{
-			//if (lastCombo != null) lastCombo.kill();
+			if (lastCombo != null) lastCombo.kill();
 			lastCombo = comboSpr;
 		}
 		if (lastScore != null)
 		{
 			while (lastScore.length > 0)
 			{
-				//lastScore[0].kill();
+				lastScore[0].kill();
 				lastScore.remove(lastScore[0]);
 			}
 		}

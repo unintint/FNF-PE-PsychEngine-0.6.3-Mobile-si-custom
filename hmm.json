@@ -10,7 +10,7 @@
       "name": "linc_luajit",
       "type": "git",
       "ref": "main",
-      "url": "https://github.com/mcagabe19-stuff/linc_luajit-legacy"
+      "url": "https://github.com/mcagabe19-stuff/linc_luajit-rewriten"
     },
     {
       "name": "extension-androidtools",
@@ -20,9 +20,8 @@
     },
     {
       "name": "flixel",
-      "type": "git",
-      "ref": "main",
-      "url": "https://github.com/MobilePorting/flixel-0.6.3"
+      "type": "haxelib",
+      "version": "4.11.0"
     },
     {
       "name": "flixel-addons",
@@ -55,7 +54,7 @@
       "name": "lime",
       "type": "git",
       "ref": "develop",
-      "url": "https://github.com/mcagabe19-stuff/lime"
+      "url": "https://github.com/mcagabe19-stuff/lime-8.2.1"
     },
     {
       "name": "openfl",
