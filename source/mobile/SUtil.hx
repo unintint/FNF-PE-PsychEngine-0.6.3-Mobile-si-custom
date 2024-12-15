@@ -92,7 +92,7 @@ class SUtil
 	}
 
 	#if android
-	public static function requestPermissions():Void
+	public static function doPermissionsShit():Void
 	{
 		if (AndroidVersion.SDK_INT >= AndroidVersionCode.TIRAMISU)
 			AndroidPermissions.requestPermissions(['READ_MEDIA_IMAGES', 'READ_MEDIA_VIDEO', 'READ_MEDIA_AUDIO']);
