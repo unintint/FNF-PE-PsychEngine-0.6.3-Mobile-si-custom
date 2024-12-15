@@ -151,7 +151,7 @@ class SUtil
 		#if android
 		android.Tools.showAlertDialog(title, message, {name: "OK", func: null}, null);
 		#else
-		FlxG.stage.window.alert(message, title);
+		flixel.FlxG.stage.window.alert(message, title);
 		#end
 	}
 }
