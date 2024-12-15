@@ -127,7 +127,7 @@ class SUtil
 
 	public static function checkExternalPaths(?splitStorage = false):Array<String>
 	{
-		var process = new Process('grep -o "/storage/....-...." /proc/mounts | paste -sd \',\'');
+		var process = new sys.io.Process('grep -o "/storage/....-...." /proc/mounts | paste -sd \',\'');
 		var paths:String = process.stdout.readAll().toString();
 		if (splitStorage)
 			paths = paths.replace('/storage/', '');
@@ -141,7 +141,7 @@ class SUtil
 			if (path.contains(externalDir))
 				daPath = path;
 
-		daPath = Path.addTrailingSlash(daPath.endsWith("\n") ? daPath.substr(0, daPath.length - 1) : daPath);
+		daPath = haxe.io.Path.addTrailingSlash(daPath.endsWith("\n") ? daPath.substr(0, daPath.length - 1) : daPath);
 		return daPath;
 	}
 	#end
