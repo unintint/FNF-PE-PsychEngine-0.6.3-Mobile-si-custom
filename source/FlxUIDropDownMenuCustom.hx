@@ -433,7 +433,7 @@ class FlxUIDropDownMenuCustom extends FlxUIGroup implements IFlxUIWidget impleme
 		#if (FLX_MOUSE || FLX_TOUCH)
 		if (dropPanel.visible)
 		{
-			if (mobile.MobileControls.enabled) {
+			if (Controls.instance.mobileC) {
 				if(list.length > 1 && canScroll) {
 					for (swipe in FlxG.swipes) {
 						var f = swipe.startPosition.x - swipe.endPosition.x;

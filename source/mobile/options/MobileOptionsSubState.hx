@@ -1,97 +1,95 @@
+/*
+ * Copyright (C) 2024 Mobile Porting Team
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ */
+
 package mobile.options;
 
+import flixel.input.keyboard.FlxKey;
 import options.BaseOptionsMenu;
 import options.Option;
 #if sys
 import sys.io.File;
 #end
-import flixel.FlxG;
-import flixel.input.keyboard.FlxKey;
 
 class MobileOptionsSubState extends BaseOptionsMenu
 {
 	#if android
 	var storageTypes:Array<String> = ["EXTERNAL_DATA", "EXTERNAL_OBB", "EXTERNAL_MEDIA", "EXTERNAL"];
-	var externalPaths:Array<String> = SUtil.checkExternalPaths(true);
+	var externalPaths:Array<String> = StorageUtil.checkExternalPaths(true);
 	final lastStorageType:String = ClientPrefs.storageType;
 	#end
+	final exControlTypes:Array<String> = ["NONE", "SINGLE", "DOUBLE"];
 	final hintOptions:Array<String> = ["No Gradient", "No Gradient (Old)", "Gradient", "Hidden"];
+	var option:Option;
 
 	public function new()
 	{
-		#if android if (!externalPaths.contains('\n')) storageTypes = storageTypes.concat(externalPaths); #end
+		#if android if (!externalPaths.contains('\n'))
+			storageTypes = storageTypes.concat(externalPaths); #end
 		title = 'Mobile Options';
 		rpcTitle = 'Mobile Options Menu'; // for Discord Rich Presence, fuck it
 
-		var option:Option = new Option('Extra Controls',
-		'If checked, extra ${MobileControls.mode == "Hitbox" ? 'hint' : 'button'} to simulate pressing the space bar will be enabled.',
-		'mobileCEx',
-		'bool',
-		false);
+		option = new Option('Extra Controls', 'Select how many extra buttons you prefer to have?\nThey can be used for mechanics with LUA or HScript.',
+			'extraButtons', 'string', 'NONE', exControlTypes);
 		addOption(option);
 
-		var option:Option = new Option('Mobile Controls Opacity',
-		'Selects the opacity for the mobile buttons (be careful not to put it at 0 and lose track of your buttons).',
-		'mobileCAlpha',
-		'percent',
-		null);
+		option = new Option('Mobile Controls Opacity',
+			'Selects the opacity for the mobile buttons (careful not to put it at 0 and lose track of your buttons).', 'controlsAlpha', 'percent', 60);
 		option.scrollSpeed = 1;
-		option.minValue = 0.0;
+		option.minValue = 0.001;
 		option.maxValue = 1;
 		option.changeValue = 0.1;
 		option.decimals = 1;
 		option.onChange = () ->
 		{
-			virtualPad.alpha = 0; // what? that fixed somehow
-			virtualPad.alpha = curOption.getValue();
-			if (MobileControls.enabled) {
-				TitleState.volumeUpKeys = FlxG.sound.volumeUpKeys = [];
-				TitleState.volumeDownKeys = FlxG.sound.volumeDownKeys = [];
-				TitleState.muteKeys = FlxG.sound.muteKeys = [];
-			} else {
-				TitleState.volumeUpKeys = FlxG.sound.volumeUpKeys = [FlxKey.PLUS, FlxKey.NUMPADPLUS];
-				TitleState.volumeDownKeys = FlxG.sound.volumeDownKeys = [FlxKey.MINUS, FlxKey.NUMPADMINUS];
-				TitleState.muteKeys = FlxG.sound.muteKeys = [FlxKey.ZERO, FlxKey.NUMPADZERO];
-			}
+			touchPad.alpha = curOption.getValue();
 		};
 		addOption(option);
 
 		#if mobile
-		var option:Option = new Option('Allow Phone Screensaver',
-		'If checked, the phone will go sleep after going inactive for few seconds.\n(The time depends on your phone\'s options)',
-		'screensaver',
-		'bool',
-		false);
+		option = new Option('Allow Phone Screensaver',
+			'If checked, the phone will sleep after going inactive for few seconds.\n(The time depends on your phone\'s options)', 'screensaver', 'bool', false);
 		option.onChange = () -> lime.system.System.allowScreenTimeout = curOption.getValue();
 		addOption(option);
 		#end
 
-		if (MobileControls.mode == "Hitbox")
+		if (MobileData.mode == 3)
 		{
-			var option:Option = new Option('Hitbox Design',
-			'Choose how your hitbox should look like.',
-			'hitboxType',
-			'string',
-			null,
-			hintOptions);
+			option = new Option('Hitbox Design', 'Choose how your hitbox should look like.', 'hitboxType', 'string', 'Gradient', hintOptions);
 			addOption(option);
 
-			var option:Option = new Option('Hitbox Position',
-			'If checked, the hitbox will be put at the bottom of the screen, otherwise will stay at the top.',
-			'hitboxPos',
-			'bool',
-			true);
+			option = new Option('Hitbox Position', 'If checked, the hitbox will be put at the bottom of the screen, otherwise will stay at the top.',
+				'hitboxPos', 'bool', true);
 			addOption(option);
 		}
 
+		option = new Option('Dynamic Controls Color',
+			'If checked, the mobile controls color will be set to the notes color in your settings.\n(have effect during gameplay only)', 'dynamicColors',
+			'bool', true);
+		addOption(option);
+
 		#if android
-		var option:Option = new Option('Storage Type',
-			'Which folder Psych Engine should use?\n(CHANGING THIS MAKES DELETE YOUR OLD FOLDER!!)',
-			'storageType',
-			'string',
-			null,
-			storageTypes);
-			addOption(option);
+		option = new Option('Storage Type', 'Which folder Psych Engine should use?\n(CHANGING THIS MAKES DELETE YOUR OLD FOLDER!!)', 'storageType', 'string',
+			'EXTERNAL_DATA', storageTypes);
+		addOption(option);
 		#end
 
 		super();
@@ -101,9 +99,9 @@ class MobileOptionsSubState extends BaseOptionsMenu
 	function onStorageChange():Void
 	{
 		File.saveContent(lime.system.System.applicationStorageDirectory + 'storagetype.txt', ClientPrefs.storageType);
-	
+
 		var lastStoragePath:String = StorageType.fromStrForce(lastStorageType) + '/';
-	
+
 		try
 		{
 			if (ClientPrefs.storageType != "EXTERNAL")
@@ -114,10 +112,12 @@ class MobileOptionsSubState extends BaseOptionsMenu
 	}
 	#end
 
-	override public function destroy() {
+	override public function destroy()
+	{
 		super.destroy();
 		#if android
-		if (ClientPrefs.storageType != lastStorageType) {
+		if (ClientPrefs.storageType != lastStorageType)
+		{
 			onStorageChange();
 			CoolUtil.showPopUp('Storage Type has been changed and you needed restart the game!!\nPress OK to close the game.', 'Notice!');
 			lime.system.System.exit(0);

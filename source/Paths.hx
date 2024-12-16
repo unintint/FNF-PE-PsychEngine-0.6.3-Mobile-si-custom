@@ -126,6 +126,9 @@ class Paths
 
 	public static function getPath(file:String, type:AssetType, ?library:Null<String> = null)
 	{
+		if (library == "mobile")
+			return getPreloadPath('mobile/$file');
+
 		if (library != null)
 			return getLibraryPath(file, library);
 
@@ -510,7 +513,7 @@ class Paths
 		var list:Array<String> = [];
 		var modsFolder:String = mods();
 		if(FileSystem.exists(modsFolder)) {
-			for (folder in FileSystem.readDirectory(modsFolder)) {
+			for (folder in Paths.readDirectory(modsFolder)) {
 				var path = haxe.io.Path.join([modsFolder, folder]);
 				if (sys.FileSystem.isDirectory(path) && !ignoreModFolders.contains(folder) && !list.contains(folder)) {
 					list.push(folder);
@@ -520,4 +523,25 @@ class Paths
 		return list;
 	}
 	#end
+
+	public static function readDirectory(directory:String):Array<String>
+	{
+		#if MODS_ALLOWED
+		return FileSystem.readDirectory(directory);
+		#else
+		var dirs:Array<String> = [];
+		for(dir in Assets.list().filter(folder -> folder.startsWith(directory)))
+		{
+			@:privateAccess
+			for(library in lime.utils.Assets.libraries.keys())
+			{
+				if(library != 'default' && Assets.exists('$library:$dir') && (!dirs.contains('$library:$dir') || !dirs.contains(dir)))
+					dirs.push('$library:$dir');
+				else if(Assets.exists(dir) && !dirs.contains(dir))
+					dirs.push(dir);
+			}
+		}
+		return dirs.map(dir -> dir.substr(dir.lastIndexOf("/") + 1));
+		#end
+	}
 }

@@ -161,8 +161,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		changeSelection();
 		reloadCheckboxes();
 
-		addVirtualPad(LEFT_FULL, A_B_C);
-		addVirtualPadCamera();
+		addTouchPad("LEFT_FULL", "A_B_C");
+		addTouchPadCamera();
 	}
 
 	var nextAccept:Int = 5;
@@ -293,7 +293,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 				}
 			}
 
-			if(virtualPad.buttonC.justPressed || controls.RESET)
+			if(touchPad.buttonC.justPressed || controls.RESET)
 			{
 				for (i in 0...optionsArray.length)
 				{

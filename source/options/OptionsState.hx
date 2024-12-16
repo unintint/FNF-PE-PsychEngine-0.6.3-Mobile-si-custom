@@ -36,8 +36,7 @@ class OptionsState extends MusicBeatState
 
 	function openSelectedSubstate(label:String) {
 		if (label != "Adjust Delay and Combo"){
-			removeVirtualPad();
-			persistentUpdate = false;
+			touchPad.active = touchPad.visible = persistentUpdate = false;
 		}
 		switch(label) {
 			case 'Note Colors':
@@ -98,16 +97,16 @@ class OptionsState extends MusicBeatState
 		changeSelection();
 		ClientPrefs.saveSettings();
 
-		addVirtualPad(UP_DOWN, A_B_C);
+		addTouchPad("UP_DOWN", "A_B_C");
 
 		super.create();
 	}
 
 	override function closeSubState() {
 		super.closeSubState();
-		removeVirtualPad();
-		addVirtualPad(UP_DOWN, A_B_C);
 		persistentUpdate = true;
+		removeTouchPad();
+		addTouchPad("UP_DOWN", "A_B_C");
 		ClientPrefs.saveSettings();
 	}
 
@@ -131,9 +130,9 @@ class OptionsState extends MusicBeatState
 			openSelectedSubstate(options[curSelected]);
 		}
 
-		if (virtualPad.buttonC.justPressed) {
+		if (touchPad.buttonC.justPressed) {
 			persistentUpdate = false;
-			openSubState(new mobile.MobileControlsSelectSubState());
+			openSubState(new mobile.MobileControlSelectSubState());
 		}
 	}
 	

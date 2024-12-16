@@ -5,15 +5,19 @@ import flixel.FlxG;
 import flixel.FlxSubState;
 import flixel.FlxBasic;
 import flixel.FlxSprite;
-import mobile.flixel.FlxVirtualPad;
+import mobile.MobileData;
+import mobile.IMobileControls;
+import mobile.Hitbox;
+import mobile.TouchPad;
 import flixel.FlxCamera;
-import flixel.input.actions.FlxActionInput;
 import flixel.util.FlxDestroyUtil;
 
 class MusicBeatSubstate extends FlxSubState
 {
+	public static var instance:MusicBeatSubstate;
 	public function new()
 	{
+		instance = this;
 		super();
 	}
 
@@ -30,51 +34,91 @@ class MusicBeatSubstate extends FlxSubState
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
 
-	var virtualPad:FlxVirtualPad;
-	var trackedInputsVirtualPad:Array<FlxActionInput> = [];
+	public var touchPad:TouchPad;
+	public var touchPadCam:FlxCamera;
+	public var mobileControls:IMobileControls;
+	public var mobileControlsCam:FlxCamera;
 
-	public function addVirtualPad(DPad:FlxDPadMode, Action:FlxActionMode):Void
+	public function addTouchPad(DPad:String, Action:String)
 	{
-		if (virtualPad != null)
-			removeVirtualPad();
-
-		virtualPad = new FlxVirtualPad(DPad, Action);
-		add(virtualPad);
-
-		controls.setVirtualPadUI(virtualPad, DPad, Action);
-		trackedInputsVirtualPad = controls.trackedInputsUI;
-		controls.trackedInputsUI = [];
+		touchPad = new TouchPad(DPad, Action);
+		add(touchPad);
 	}
 
-	public function removeVirtualPad():Void
+	public function removeTouchPad()
 	{
-		if (trackedInputsVirtualPad.length > 0)
-			controls.removeVirtualControlsInput(trackedInputsVirtualPad);
-
-		if (virtualPad != null)
-			remove(virtualPad);
-	}
-
-	public function addVirtualPadCamera(DefaultDrawTarget:Bool = false):Void
-	{
-		if (virtualPad != null)
+		if (touchPad != null)
 		{
-			var camControls:FlxCamera = new FlxCamera();
-			camControls.bgColor.alpha = 0;
-			FlxG.cameras.add(camControls, DefaultDrawTarget);
-			virtualPad.cameras = [camControls];
+			remove(touchPad);
+			touchPad = FlxDestroyUtil.destroy(touchPad);
+		}
+
+		if(touchPadCam != null)
+		{
+			FlxG.cameras.remove(touchPadCam);
+			touchPadCam = FlxDestroyUtil.destroy(touchPadCam);
 		}
 	}
 
-	override function destroy():Void
+	public function addMobileControls(defaultDrawTarget:Bool = false):Void
 	{
-		if (trackedInputsVirtualPad.length > 0)
-			controls.removeVirtualControlsInput(trackedInputsVirtualPad);
+		var extraMode = MobileData.extraActions.get(ClientPrefs.extraButtons);
 
+		switch (MobileData.mode)
+		{
+			case 0: // RIGHT_FULL
+				mobileControls = new TouchPad('RIGHT_FULL', 'NONE', extraMode);
+			case 1: // LEFT_FULL
+				mobileControls = new TouchPad('LEFT_FULL', 'NONE', extraMode);
+			case 2: // CUSTOM
+				mobileControls = MobileData.getTouchPadCustom(new TouchPad('RIGHT_FULL', 'NONE', extraMode));
+			case 3: // HITBOX
+				mobileControls = new Hitbox(extraMode);
+		}
+
+		mobileControls.instance = MobileData.setButtonsColors(mobileControls.instance);
+		mobileControlsCam = new FlxCamera();
+		mobileControlsCam.bgColor.alpha = 0;
+		FlxG.cameras.add(mobileControlsCam, defaultDrawTarget);
+
+		mobileControls.instance.cameras = [mobileControlsCam];
+		mobileControls.instance.visible = false;
+		add(mobileControls.instance);
+	}
+
+	public function removeMobileControls()
+	{
+		if (mobileControls != null)
+		{
+			remove(mobileControls.instance);
+			mobileControls.instance = FlxDestroyUtil.destroy(mobileControls.instance);
+			mobileControls = null;
+		}
+
+		if (mobileControlsCam != null)
+		{
+			FlxG.cameras.remove(mobileControlsCam);
+			mobileControlsCam = FlxDestroyUtil.destroy(mobileControlsCam);
+		}
+	}
+
+	public function addTouchPadCamera(defaultDrawTarget:Bool = false):Void
+	{
+		if (touchPad != null)
+		{
+			touchPadCam = new FlxCamera();
+			touchPadCam.bgColor.alpha = 0;
+			FlxG.cameras.add(touchPadCam, defaultDrawTarget);
+			touchPad.cameras = [touchPadCam];
+		}
+	}
+
+	override function destroy()
+	{
+		removeTouchPad();
+		removeMobileControls();
+		
 		super.destroy();
-
-		if (virtualPad != null)
-			virtualPad = FlxDestroyUtil.destroy(virtualPad);
 	}
 
 	override function update(elapsed:Float)

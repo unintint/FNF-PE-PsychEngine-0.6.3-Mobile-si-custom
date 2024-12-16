@@ -186,9 +186,9 @@ class FreeplayState extends MusicBeatState
 		textBG.alpha = 0.6;
 		add(textBG);
 
-		final buttonSpace:String = mobile.MobileControls.enabled ? 'X' : 'SPACE';
-		final buttonCtrl:String = mobile.MobileControls.enabled ? 'C' : 'CTRL';
-		final buttonReset:String = mobile.MobileControls.enabled ? 'Y' : 'RESET';
+		final buttonSpace:String = controls.mobileC ? 'X' : 'SPACE';
+		final buttonCtrl:String = controls.mobileC ? 'C' : 'CTRL';
+		final buttonReset:String = controls.mobileC ? 'Y' : 'RESET';
 
 		#if PRELOAD_ALL
 		var leText:String = 'Press $buttonSpace to listen to the Song / Press $buttonCtrl to open the Gameplay Changers Menu / Press $buttonReset to Reset your Score and Accuracy.';
@@ -202,7 +202,7 @@ class FreeplayState extends MusicBeatState
 		text.scrollFactor.set();
 		add(text);
 
-        addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
+        addTouchPad("LEFT_FULL", "A_B_C_X_Y_Z");
 
 		super.create();
 	}
@@ -210,8 +210,8 @@ class FreeplayState extends MusicBeatState
 	override function closeSubState() {
 		changeSelection(0, false);
 		persistentUpdate = true;
-		removeVirtualPad();
-		addVirtualPad(LEFT_FULL, A_B_C_X_Y_Z);
+		removeTouchPad();
+		addTouchPad("LEFT_FULL", "A_B_C_X_Y_Z");
 		super.closeSubState();
 	}
 
@@ -274,11 +274,11 @@ class FreeplayState extends MusicBeatState
 		var upP = controls.UI_UP_P;
 		var downP = controls.UI_DOWN_P;
 		var accepted = controls.ACCEPT;
-		var space = virtualPad.buttonX.justPressed || FlxG.keys.justPressed.SPACE;
-		var ctrl = virtualPad.buttonC.justPressed || FlxG.keys.justPressed.CONTROL;
+		var space = touchPad.buttonX.justPressed || FlxG.keys.justPressed.SPACE;
+		var ctrl = touchPad.buttonC.justPressed || FlxG.keys.justPressed.CONTROL;
 
 		var shiftMult:Int = 1;
-		if(virtualPad.buttonZ.pressed || FlxG.keys.pressed.SHIFT) shiftMult = 3;
+		if(touchPad.buttonZ.pressed || FlxG.keys.pressed.SHIFT) shiftMult = 3;
 
 		if(songs.length > 1)
 		{
@@ -332,7 +332,7 @@ class FreeplayState extends MusicBeatState
 
 		if(ctrl)
 		{
-			persistentUpdate = false;
+			touchPad.active = touchPad.visible = persistentUpdate = false;
 			openSubState(new GameplayChangersSubstate());
 		}
 		else if(space)
@@ -386,7 +386,7 @@ class FreeplayState extends MusicBeatState
 				colorTween.cancel();
 			}
 			
-			if (virtualPad.buttonZ.pressed || FlxG.keys.pressed.SHIFT){
+			if (touchPad.buttonZ.pressed || FlxG.keys.pressed.SHIFT){
 				LoadingState.loadAndSwitchState(new ChartingState());
 			}else{
 				LoadingState.loadAndSwitchState(new PlayState());
@@ -396,9 +396,9 @@ class FreeplayState extends MusicBeatState
 					
 			destroyFreeplayVocals();
 		}
-		else if(virtualPad.buttonY.justPressed || controls.RESET)
+		else if(touchPad.buttonY.justPressed || controls.RESET)
 		{
-			persistentUpdate = false;
+			touchPad.active = touchPad.visible = persistentUpdate = false;
 			openSubState(new ResetScoreSubState(songs[curSelected].songName, curDifficulty, songs[curSelected].songCharacter));
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 		}

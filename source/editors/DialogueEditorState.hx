@@ -85,8 +85,8 @@ class DialogueEditorState extends MusicBeatState
 		addEditorBox();
 		FlxG.mouse.visible = true;
 
-		final buttonO:String = mobile.MobileControls.enabled ? 'A' : 'O';
-		final buttonP:String = mobile.MobileControls.enabled ? 'X' : 'P';
+		final buttonO:String = controls.mobileC ? 'A' : 'O';
+		final buttonP:String = controls.mobileC ? 'X' : 'P';
 
 		var addLineText:FlxText = new FlxText(10, 10, FlxG.width - 20, 'Press $buttonO to remove the current dialogue line, Press $buttonP to add another line after the current one.', 8);
 		addLineText.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -108,7 +108,7 @@ class DialogueEditorState extends MusicBeatState
 		daText.scaleY = 0.7;
 		add(daText);
 		changeText();
-		addVirtualPad(LEFT_FULL, A_B_X_Y);
+		addTouchPad("LEFT_FULL", "A_B_X_Y");
 		super.create();
 	}
 
@@ -228,8 +228,8 @@ class DialogueEditorState extends MusicBeatState
 		character.playAnim(); //Plays random animation
 		characterAnimSpeed();
 
-		final buttonW:String = mobile.MobileControls.enabled ? 'Up' : 'W';
-		final buttonS:String = mobile.MobileControls.enabled ? 'Down' : 'S';
+		final buttonW:String = controls.mobileC ? 'Up' : 'W';
+		final buttonS:String = controls.mobileC ? 'Down' : 'S';
 
 		if(character.animation.curAnim != null && character.jsonFile.animations != null) {
 			animText.text = 'Animation: ' + character.jsonFile.animations[curAnim].anim + ' (' + (curAnim + 1) +' / ' + character.jsonFile.animations.length + ') - Press $buttonW or $buttonS to scroll';
@@ -280,8 +280,8 @@ class DialogueEditorState extends MusicBeatState
 					curAnim = 0;
 					if(character.jsonFile.animations.length > curAnim && character.jsonFile.animations[curAnim] != null) {
 						character.playAnim(character.jsonFile.animations[curAnim].anim, daText.finishedText);
-						final buttonW:String = mobile.MobileControls.enabled ? 'Up' : 'W';
-						final buttonS:String = mobile.MobileControls.enabled ? 'Down' : 'S';
+						final buttonW:String = controls.mobileC ? 'Up' : 'W';
+						final buttonS:String = controls.mobileC ? 'Down' : 'S';
 						animText.text = 'Animation: ' + character.jsonFile.animations[curAnim].anim + ' (' + (curAnim + 1) +' / ' + character.jsonFile.animations.length + ') - Press $buttonW or $buttonS to scroll';
 					} else {
 						animText.text = 'ERROR! NO ANIMATIONS FOUND';
@@ -361,17 +361,17 @@ class DialogueEditorState extends MusicBeatState
 			FlxG.sound.muteKeys = TitleState.muteKeys;
 			FlxG.sound.volumeDownKeys = TitleState.volumeDownKeys;
 			FlxG.sound.volumeUpKeys = TitleState.volumeUpKeys;
-			if(virtualPad.buttonY.justPressed || FlxG.keys.justPressed.SPACE) {
+			if(touchPad.buttonY.justPressed || FlxG.keys.justPressed.SPACE) {
 				reloadText(false);
 			}
-			if(virtualPad.buttonB.justPressed || FlxG.keys.justPressed.ESCAPE) {
+			if(touchPad.buttonB.justPressed || FlxG.keys.justPressed.ESCAPE) {
 				MusicBeatState.switchState(new editors.MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('freakyMenu'), 1);
 				transitioning = true;
 			}
 			var negaMult:Array<Int> = [1, -1];
-			var controlAnim:Array<Bool> = [FlxG.keys.justPressed.W || virtualPad.buttonUp.justPressed, FlxG.keys.justPressed.S || virtualPad.buttonDown.justPressed];
-			var controlText:Array<Bool> = [FlxG.keys.justPressed.D || virtualPad.buttonRight.justPressed, FlxG.keys.justPressed.A || virtualPad.buttonLeft.justPressed];
+			var controlAnim:Array<Bool> = [FlxG.keys.justPressed.W || touchPad.buttonUp.justPressed, FlxG.keys.justPressed.S || touchPad.buttonDown.justPressed];
+			var controlText:Array<Bool> = [FlxG.keys.justPressed.D || touchPad.buttonRight.justPressed, FlxG.keys.justPressed.A || touchPad.buttonLeft.justPressed];
 			for (i in 0...controlAnim.length) {
 				if(controlAnim[i] && character.jsonFile.animations.length > 0) {
 					curAnim -= negaMult[i];
@@ -383,8 +383,8 @@ class DialogueEditorState extends MusicBeatState
 						character.playAnim(animToPlay, daText.finishedText);
 						dialogueFile.dialogue[curSelected].expression = animToPlay;
 					}
-					final buttonW:String = mobile.MobileControls.enabled ? 'Up' : 'W';
-					final buttonS:String = mobile.MobileControls.enabled ? 'Down' : 'S';
+					final buttonW:String = controls.mobileC ? 'Up' : 'W';
+					final buttonS:String = controls.mobileC ? 'Down' : 'S';
 					animText.text = 'Animation: ' + animToPlay + ' (' + (curAnim + 1) +' / ' + character.jsonFile.animations.length + ') - Press $buttonW or $buttonS to scroll';
 				}
 				if(controlText[i]) {
@@ -392,7 +392,7 @@ class DialogueEditorState extends MusicBeatState
 				}
 			}
 
-			if(virtualPad.buttonA.justPressed || FlxG.keys.justPressed.O) {
+			if(touchPad.buttonA.justPressed || FlxG.keys.justPressed.O) {
 				dialogueFile.dialogue.remove(dialogueFile.dialogue[curSelected]);
 				if(dialogueFile.dialogue.length < 1) //You deleted everything, dumbo!
 				{
@@ -401,7 +401,7 @@ class DialogueEditorState extends MusicBeatState
 					];
 				}
 				changeText();
-			} else if(virtualPad.buttonX.justPressed || FlxG.keys.justPressed.P) {
+			} else if(touchPad.buttonX.justPressed || FlxG.keys.justPressed.P) {
 				dialogueFile.dialogue.insert(curSelected + 1, copyDefaultLine());
 				changeText(1);
 			}
@@ -443,16 +443,16 @@ class DialogueEditorState extends MusicBeatState
 				}
 			}
 			character.playAnim(character.jsonFile.animations[curAnim].anim, daText.finishedText);
-			final buttonW:String = mobile.MobileControls.enabled ? 'Up' : 'W';
-			final buttonS:String = mobile.MobileControls.enabled ? 'Down' : 'S';
+			final buttonW:String = controls.mobileC ? 'Up' : 'W';
+			final buttonS:String = controls.mobileC ? 'Down' : 'S';
 			animText.text = 'Animation: ' + character.jsonFile.animations[curAnim].anim + ' (' + (curAnim + 1) +' / ' + leLength + ') - Press $buttonW or $buttonS to scroll';
 		} else {
 			animText.text = 'ERROR! NO ANIMATIONS FOUND';
 		}
 		characterAnimSpeed();
 
-		final buttonA:String = mobile.MobileControls.enabled ? 'Left' : 'A';
-		final buttonD:String = mobile.MobileControls.enabled ? 'Right' : 'D';
+		final buttonA:String = controls.mobileC ? 'Left' : 'A';
+		final buttonD:String = controls.mobileC ? 'Right' : 'D';
 
 		selectedText.text = 'Line: (' + (curSelected + 1) + ' / ' + dialogueFile.dialogue.length + ') - Press $buttonA or $buttonD to scroll';
 	}
@@ -538,7 +538,7 @@ class DialogueEditorState extends MusicBeatState
 		if (data.length > 0)
 		{
 			#if mobile
-			SUtil.saveContent('dialogue', '.json', data);
+			StorageUtil.saveContent('dialogue.json', data);
 			#else
 			_file = new FileReference();
 			_file.addEventListener(Event.COMPLETE, onSaveComplete);

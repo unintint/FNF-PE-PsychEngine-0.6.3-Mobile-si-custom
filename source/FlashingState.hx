@@ -23,8 +23,8 @@ class FlashingState extends MusicBeatState
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		add(bg);
 
-		final buttonBack:String = mobile.MobileControls.enabled ? 'B' : 'ESCAPE';
-		final buttonAccept:String = mobile.MobileControls.enabled ? 'A' : 'ENTER';
+		final buttonBack:String = controls.mobileC ? 'B' : 'ESCAPE';
+		final buttonAccept:String = controls.mobileC ? 'A' : 'ENTER';
 
 		warnText = new FlxText(0, 0, FlxG.width,
 			'Hey, watch out!\n
@@ -37,7 +37,7 @@ class FlashingState extends MusicBeatState
 		warnText.screenCenter(Y);
 		add(warnText);
 
-		addVirtualPad(NONE, A_B);
+		addTouchPad("NONE", "A_B");
 	}
 
 	override function update(elapsed:Float)

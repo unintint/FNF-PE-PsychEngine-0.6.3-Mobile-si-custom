@@ -102,7 +102,7 @@ class TitleState extends MusicBeatState
 		/*#if (polymod && !html5)
 		if (sys.FileSystem.exists('mods/')) {
 			var folders:Array<String> = [];
-			for (file in sys.FileSystem.readDirectory('mods/')) {
+			for (file in sys.Paths.readDirectory('mods/')) {
 				var path = haxe.io.Path.join(['mods/', file]);
 				if (sys.FileSystem.isDirectory(path)) {
 					folders.push(file);
@@ -190,6 +190,7 @@ class TitleState extends MusicBeatState
 			}
 			persistentUpdate = true;
 			persistentDraw = true;
+			mobile.MobileData.init();
 		}
 
 		if (FlxG.save.data.weekCompleted != null)

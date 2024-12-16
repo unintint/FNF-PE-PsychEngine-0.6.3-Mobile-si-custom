@@ -80,7 +80,7 @@ class ModsMenuState extends MusicBeatState
 		add(bg);
 		bg.screenCenter();
 
-		final buttonBack:String = mobile.MobileControls.enabled ? 'B' : 'BACK';
+		final buttonBack:String = controls.mobileC ? 'B' : 'BACK';
 
 		noModsTxt = new FlxText(0, 0, FlxG.width, 'NO MODS INSTALLED\nPRESS $buttonBack TO EXIT AND INSTALL A MOD', 48);
 		if(FlxG.random.bool(0.1)) noModsTxt.text += '\nBITCH.'; //meanie
@@ -379,7 +379,7 @@ class ModsMenuState extends MusicBeatState
 
 		FlxG.mouse.visible = true;
 
-		addVirtualPad(!noModsTxt.visible ? UP_DOWN : NONE, B);
+		addTouchPad(!noModsTxt.visible ? "UP_DOWN" : "NONE", "B");
 
 		super.create();
 	}

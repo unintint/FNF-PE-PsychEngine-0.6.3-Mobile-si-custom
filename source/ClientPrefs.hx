@@ -7,17 +7,19 @@ import flixel.graphics.FlxGraphic;
 import Controls;
 
 class ClientPrefs {
-	#if mobile
+	// Mobile and Mobile Controls Releated
+	public static var extraButtons:String = "NONE"; // mobile extra button option
+	public static var hitboxPos:Bool = true; // hitbox extra button position option
+	public static var dynamicColors:Bool = true; // yes cause its cool -Karim
+	public static var controlsAlpha:Float = FlxG.onMobile ? 0.6 : 0;
 	public static var screensaver:Bool = false;
 	#if android
 	public static var storageType:String = "EXTERNAL_DATA";
 	#end
-	#end
-	public static var mobileCAlpha:Float = FlxG.onMobile ? 0.6 : 0;
-	public static var mobileCEx:Bool = false;
-	public static var hitboxType:String = "No Gradient";
-	public static var hitboxPos:Bool = true;
-	public static var popUpScore:Bool = true;
+	public static var hitboxType:String = "Gradient";
+	public static var popUpRating:Bool = true;
+	public static var vsync:Bool = false;
+	public static var gameOverVibration:Bool = false;
 
 	public static var downScroll:Bool = false;
 	public static var middleScroll:Bool = false;
@@ -40,7 +42,7 @@ class ClientPrefs {
 	public static var scoreZoom:Bool = true;
 	public static var noReset:Bool = false;
 	public static var healthBarAlpha:Float = 1;
-	public static var controllerMode:Bool = mobile.MobileControls.enabled;
+	public static var controllerMode:Bool = false;
 	public static var hitsoundVolume:Float = 0;
 	public static var pauseMusic:String = 'Tea Time';
 	public static var checkForUpdates:Bool = true;
@@ -106,17 +108,19 @@ class ClientPrefs {
 	}
 
 	public static function saveSettings() {
-		#if mobile
+		FlxG.save.data.extraButtons = extraButtons;
+		FlxG.save.data.hitboxPos = hitboxPos;
+		FlxG.save.data.dynamicColors = dynamicColors;
+		FlxG.save.data.controlsAlpha = controlsAlpha;
 		FlxG.save.data.screensaver = screensaver;
 		#if android
 		FlxG.save.data.storageType = storageType;
 		#end
-		#end
-		FlxG.save.data.mobileCAlpha = mobileCAlpha;
-		FlxG.save.data.mobileCEx = mobileCEx;
 		FlxG.save.data.hitboxType = hitboxType;
-		FlxG.save.data.hitboxPos = hitboxPos;
-		FlxG.save.data.popUpScore = popUpScore;
+		FlxG.save.data.popUpRating = popUpRating;
+		FlxG.save.data.vsync = vsync;
+		FlxG.save.data.gameOverVibration = gameOverVibration;
+
 		FlxG.save.data.downScroll = downScroll;
 		FlxG.save.data.middleScroll = middleScroll;
 		FlxG.save.data.opponentStrums = opponentStrums;
@@ -164,7 +168,18 @@ class ClientPrefs {
 	}
 
 	public static function loadPrefs() {
-		#if mobile
+		if(FlxG.save.data.extraButtons != null) {
+			extraButtons = FlxG.save.data.extraButtons;
+		}
+		if(FlxG.save.data.hitboxPos != null) {
+			hitboxPos = FlxG.save.data.hitboxPos;
+		}
+		if(FlxG.save.data.dynamicColors != null) {
+			dynamicColors = FlxG.save.data.dynamicColors;
+		}
+		if(FlxG.save.data.controlsAlpha != null) {
+			controlsAlpha = FlxG.save.data.controlsAlpha;
+		}
 		if(FlxG.save.data.screensaver != null) {
 			screensaver = FlxG.save.data.screensaver;
 		}
@@ -173,22 +188,19 @@ class ClientPrefs {
 			storageType = FlxG.save.data.storageType;
 		}
 		#end
-		#end
-		if(FlxG.save.data.mobileCAlpha != null) {
-			mobileCAlpha = FlxG.save.data.mobileCAlpha;
-		}
-		if(FlxG.save.data.mobileCEx != null) {
-			mobileCEx = FlxG.save.data.mobileCEx;
-		}
 		if(FlxG.save.data.hitboxType != null) {
 			hitboxType = FlxG.save.data.hitboxType;
 		}
-		if(FlxG.save.data.hitboxPos != null) {
-			hitboxPos = FlxG.save.data.hitboxPos;
+		if(FlxG.save.data.popUpRating != null) {
+			popUpRating = FlxG.save.data.popUpRating;
 		}
-		if(FlxG.save.data.popUpScore != null) {
-			popUpScore = FlxG.save.data.popUpScore;
+		if(FlxG.save.data.vsync != null) {
+			vsync = FlxG.save.data.vsync;
 		}
+		if(FlxG.save.data.gameOverVibration != null) {
+			gameOverVibration = FlxG.save.data.gameOverVibration;
+		}
+
 		if(FlxG.save.data.downScroll != null) {
 			downScroll = FlxG.save.data.downScroll;
 		}
