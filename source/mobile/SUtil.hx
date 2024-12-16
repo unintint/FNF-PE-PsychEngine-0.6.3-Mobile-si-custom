@@ -85,7 +85,7 @@ class SUtil
 				FileSystem.createDirectory('saves');
 
 			File.saveContent('saves/' + fileName + fileExtension, fileData);
-			showPopUp(fileName + " file has been saved.", "Success!");
+			CoolUtil.showPopUp(fileName + " file has been saved.", "Success!");
 		}
 		catch (e:haxe.Exception)
 			trace('File couldn\'t be saved. (${e.message})');
@@ -110,7 +110,7 @@ class SUtil
 			&& !AndroidPermissions.getGrantedPermissions().contains('android.permission.READ_MEDIA_IMAGES'))
 			|| (AndroidVersion.SDK_INT < AndroidVersionCode.TIRAMISU
 				&& !AndroidPermissions.getGrantedPermissions().contains('android.permission.READ_EXTERNAL_STORAGE')))
-			showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress OK to see what happens',
+			CoolUtil.showPopUp('If you accepted the permissions you are all good!' + '\nIf you didn\'t then expect a crash' + '\nPress OK to see what happens',
 				'Notice!');
 
 		try
@@ -120,7 +120,7 @@ class SUtil
 		}
 		catch (e:Dynamic)
 		{
-			showPopUp('Please create directory to\n' + SUtil.getStorageDirectory(true) + '\nPress OK to close the game', 'Error!');
+			CoolUtil.showPopUp('Please create directory to\n' + SUtil.getStorageDirectory(true) + '\nPress OK to close the game', 'Error!');
 			LimeSystem.exit(1);
 		}
 	}
@@ -146,14 +146,6 @@ class SUtil
 	}
 	#end
 	#end
-	public static function showPopUp(message:String, title:String):Void
-	{
-		#if android
-		android.Tools.showAlertDialog(title, message, {name: "OK", func: null}, null);
-		#else
-		flixel.FlxG.stage.window.alert(message, title);
-		#end
-	}
 }
 
 #if android

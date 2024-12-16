@@ -18,6 +18,7 @@ class ClientPrefs {
 	public static var hitboxType:String = "No Gradient";
 	public static var hitboxPos:Bool = true;
 	public static var popUpScore:Bool = true;
+
 	public static var downScroll:Bool = false;
 	public static var middleScroll:Bool = false;
 	public static var opponentStrums:Bool = true;

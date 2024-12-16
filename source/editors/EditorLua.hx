@@ -53,7 +53,7 @@ class EditorLua {
 		var result:Dynamic = LuaL.dofile(lua, script);
 		var resultStr:String = Lua.tostring(lua, result);
 		if(resultStr != null && result != 0) {
-			SUtil.showPopUp(resultStr, 'Error on .LUA script!');
+			CoolUtil.showPopUp(resultStr, 'Error on .LUA script!');
 			//trace('Error on .LUA script! ' + resultStr);
 			lua = null;
 			return;
