@@ -27,6 +27,7 @@ import haxe.Json;
 import haxe.io.Path;
 import openfl.utils.Assets;
 import flixel.math.FlxPoint;
+import flixel.util.FlxColor;
 import flixel.util.FlxSave;
 #if sys
 import sys.io.File;
@@ -109,24 +110,6 @@ class MobileData
 		}
 
 		return touchPad;
-	}
-
-	// MTODO
-	public static function setButtonsColors(buttonsInstance:Dynamic):Dynamic
-	{
-		// Dynamic Controls Color
-		var data:Dynamic;
-		if (ClientPrefs.dynamicColors)
-			data = ClientPrefs;
-		else
-			data = MobileData;
-
-		buttonsInstance.buttonLeft.color = data.arrowHSV[0][0];
-		buttonsInstance.buttonDown.color = data.arrowHSV[1][0];
-		buttonsInstance.buttonUp.color = data.arrowHSV[2][0];
-		buttonsInstance.buttonRight.color = data.arrowHSV[3][0];
-
-		return buttonsInstance;
 	}
 	
 	static function readDirectory(folder:String, map:Dynamic)

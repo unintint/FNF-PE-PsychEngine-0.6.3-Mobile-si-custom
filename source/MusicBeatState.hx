@@ -79,7 +79,6 @@ class MusicBeatState extends FlxUIState
 				mobileControls = new Hitbox(extraMode);
 		}
 
-		mobileControls.instance = MobileData.setButtonsColors(mobileControls.instance);
 		mobileControlsCam = new FlxCamera();
 		mobileControlsCam.bgColor.alpha = 0;
 		FlxG.cameras.add(mobileControlsCam, defaultDrawTarget);

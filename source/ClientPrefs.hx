@@ -10,7 +10,6 @@ class ClientPrefs {
 	// Mobile and Mobile Controls Releated
 	public static var extraButtons:String = "NONE"; // mobile extra button option
 	public static var hitboxPos:Bool = true; // hitbox extra button position option
-	public static var dynamicColors:Bool = true; // yes cause its cool -Karim
 	public static var controlsAlpha:Float = FlxG.onMobile ? 0.6 : 0;
 	public static var screensaver:Bool = false;
 	#if android
@@ -110,7 +109,6 @@ class ClientPrefs {
 	public static function saveSettings() {
 		FlxG.save.data.extraButtons = extraButtons;
 		FlxG.save.data.hitboxPos = hitboxPos;
-		FlxG.save.data.dynamicColors = dynamicColors;
 		FlxG.save.data.controlsAlpha = controlsAlpha;
 		FlxG.save.data.screensaver = screensaver;
 		#if android
@@ -173,9 +171,6 @@ class ClientPrefs {
 		}
 		if(FlxG.save.data.hitboxPos != null) {
 			hitboxPos = FlxG.save.data.hitboxPos;
-		}
-		if(FlxG.save.data.dynamicColors != null) {
-			dynamicColors = FlxG.save.data.dynamicColors;
 		}
 		if(FlxG.save.data.controlsAlpha != null) {
 			controlsAlpha = FlxG.save.data.controlsAlpha;
