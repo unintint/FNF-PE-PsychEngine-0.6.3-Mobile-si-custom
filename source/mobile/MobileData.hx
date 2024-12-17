@@ -27,7 +27,6 @@ import haxe.Json;
 import haxe.io.Path;
 import openfl.utils.Assets;
 import flixel.math.FlxPoint;
-import flixel.util.FlxColor;
 import flixel.util.FlxSave;
 #if sys
 import sys.io.File;
