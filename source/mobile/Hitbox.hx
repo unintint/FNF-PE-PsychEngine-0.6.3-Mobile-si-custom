@@ -28,6 +28,7 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
+import flixel.util.FlxSignal.FlxTypedSignal;
 import openfl.display.BitmapData;
 import openfl.display.Shape;
 import flixel.graphics.FlxGraphic;
@@ -148,7 +149,7 @@ class Hitbox extends MobileInputManager implements IMobileControls
 
 			hint.onDown.callback = function()
 			{
-				onButtonDown.dispatch(button);
+				onButtonDown.dispatch(hint);
 				if (hintTween != null)
 					hintTween.cancel();
 
@@ -168,7 +169,7 @@ class Hitbox extends MobileInputManager implements IMobileControls
 
 			hint.onOut.callback = hint.onUp.callback = function()
 			{
-				onButtonUp.dispatch(button);
+				onButtonUp.dispatch(hint);
 				if (hintTween != null)
 					hintTween.cancel();
 
@@ -188,8 +189,8 @@ class Hitbox extends MobileInputManager implements IMobileControls
 		}
 		else
 		{
-			hint.onDown.callback = () -> onButtonDown.dispatch(button);
-			hint.onOut.callback = hint.onUp.callback = () -> onButtonUp.dispatch(button);
+			hint.onDown.callback = () -> onButtonDown.dispatch(hint);
+			hint.onOut.callback = hint.onUp.callback = () -> onButtonUp.dispatch(hint);
 		}
 
 		hint.immovable = hint.multiTouch = true;

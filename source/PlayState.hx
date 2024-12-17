@@ -60,8 +60,6 @@ import StageData;
 import FunkinLua;
 import DialogueBoxPsych;
 import Conductor.Rating;
-import mobile.TouchPad;
-import mobile.input.MobileInputID;
 
 #if !flash 
 import flixel.addons.display.FlxRuntimeShader;
@@ -76,6 +74,10 @@ import sys.io.File;
 #if VIDEOS_ALLOWED
 import vlc.MP4Handler;
 #end
+
+import mobile.TouchButton;
+import mobile.TouchPad;
+import mobile.input.MobileInputID;
 
 using StringTools;
 
@@ -4454,16 +4456,104 @@ class PlayState extends MusicBeatState
 		return -1;
 	}
 
-	// MTODO
 	private function onButtonPress(button:TouchButton):Void
 	{
+		var buttonCode:Int = (button.IDs[0].toString().startsWith('NOTE')) ? button.IDs[0] : button.IDs[1];
 
+		if (!cpuControlled && startedCountdown && !paused && buttonCode > -1 && button.justPressed)
+		{
+			if (!boyfriend.stunned && generatedMusic && !endingSong)
+			{
+				// more accurate hit time for the ratings?
+				var lastTime:Float = Conductor.songPosition;
+				Conductor.songPosition = FlxG.sound.music.time;
+
+				var canMiss:Bool = !ClientPrefs.ghostTapping;
+
+				// heavily based on my own code LOL if it aint broke dont fix it
+				var pressNotes:Array<Note> = [];
+				// var notesDatas:Array<Int> = [];
+				var notesStopped:Bool = false;
+
+				var sortedNotesList:Array<Note> = [];
+				notes.forEachAlive(function(daNote:Note)
+				{
+					if (strumsBlocked[daNote.noteData] != true
+						&& daNote.canBeHit
+						&& daNote.mustPress
+						&& !daNote.tooLate
+						&& !daNote.wasGoodHit
+						&& !daNote.isSustainNote
+						&& !daNote.blockHit)
+					{
+						if (daNote.noteData == buttonCode)
+						{
+							sortedNotesList.push(daNote);
+							// notesDatas.push(daNote.noteData);
+						}
+						canMiss = true;
+					}
+				});
+				sortedNotesList.sort(sortHitNotes);
+
+				if (sortedNotesList.length > 0)
+				{
+					for (epicNote in sortedNotesList)
+					{
+						for (doubleNote in pressNotes)
+						{
+							if (Math.abs(doubleNote.strumTime - epicNote.strumTime) < 1)
+							{
+								// doubleNote.kill();
+								notes.remove(doubleNote, true);
+								doubleNote.destroy();
+							}
+							else
+								notesStopped = true;
+						}
+
+						// eee jack detection before was not super good
+						if (!notesStopped)
+						{
+							goodNoteHit(epicNote);
+							pressNotes.push(epicNote);
+						}
+					}
+				}
+				else
+				{
+					callOnLuas('onGhostTap', [buttonCode]);
+					if (canMiss)
+					{
+						noteMissPress(buttonCode);
+					}
+				}
+
+				// I dunno what you need this for but here you go
+				//									- Shubs
+
+				// Shubs, this is for the "Just the Two of Us" achievement lol
+				//									- Shadow Mario
+				keysPressed[buttonCode] = true;
+
+				// more accurate hit time for the ratings? part 2 (Now that the calculations are done, go back to the time it was before for not causing a note stutter)
+				Conductor.songPosition = lastTime;
+			}
+
+			var spr:StrumNote = playerStrums.members[buttonCode];
+			if (strumsBlocked[buttonCode] != true && spr != null && spr.animation.curAnim.name != 'confirm')
+			{
+				spr.playAnim('pressed');
+				spr.resetAnim = 0;
+			}
+			callOnLuas('onKeyPress', [buttonCode]);
+			callOnLuas('onButtonPress', [buttonCode]);
+		}
 	}
 
-	// MTODO
 	private function onButtonRelease(button:TouchButton):Void
 	{
-		//var buttonCode:Int = MobileButtonsList.createAll().indexOf(button.id[0].getName().startsWith('NOTE') ? button.id[0] : button.id[1]);
+		var buttonCode:Int = (button.IDs[0].toString().startsWith('NOTE')) ? button.IDs[0] : button.IDs[1];
 
 		if (!cpuControlled && startedCountdown && !paused && buttonCode > -1)
 		{
@@ -4473,6 +4563,8 @@ class PlayState extends MusicBeatState
 				spr.playAnim('static');
 				spr.resetAnim = 0;
 			}
+			callOnLuas('onKeyRelease', [buttonCode]);
+			callOnLuas('onButtonRelease', [buttonCode]);
 		}
 	}
 

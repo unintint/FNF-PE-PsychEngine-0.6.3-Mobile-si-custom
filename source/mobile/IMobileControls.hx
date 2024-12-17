@@ -22,6 +22,7 @@
 
 package mobile;
 
+import flixel.util.FlxSignal.FlxTypedSignal;
 import mobile.input.MobileInputManager;
 
 /**

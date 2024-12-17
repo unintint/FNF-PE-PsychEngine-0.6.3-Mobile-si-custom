@@ -27,6 +27,7 @@ import flixel.FlxSprite;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxDestroyUtil;
+import flixel.util.FlxSignal.FlxTypedSignal;
 import mobile.MobileData;
 import mobile.input.MobileInputID;
 import mobile.input.MobileInputManager;
