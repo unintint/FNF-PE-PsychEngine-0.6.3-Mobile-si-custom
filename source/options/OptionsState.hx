@@ -36,7 +36,8 @@ class OptionsState extends MusicBeatState
 
 	function openSelectedSubstate(label:String) {
 		if (label != "Adjust Delay and Combo"){
-			touchPad.active = touchPad.visible = persistentUpdate = false;
+			persistentUpdate = false;
+			removeTouchPad();
 		}
 		switch(label) {
 			case 'Note Colors':
@@ -130,7 +131,7 @@ class OptionsState extends MusicBeatState
 			openSelectedSubstate(options[curSelected]);
 		}
 
-		if (touchPad.buttonC.justPressed) {
+		if (touchPad != null && touchPad.buttonC.justPressed) {
 			touchPad.active = touchPad.visible = persistentUpdate = false;
 			openSubState(new mobile.MobileControlSelectSubState());
 		}
