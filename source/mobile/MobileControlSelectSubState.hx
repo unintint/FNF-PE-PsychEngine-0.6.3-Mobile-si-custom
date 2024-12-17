@@ -37,6 +37,7 @@ import flixel.input.touch.FlxTouch;
 import flixel.ui.FlxButton as UIButton;
 import mobile.TouchButton;
 import mobile.TouchUtil;
+import mobile.objects.Alphabet;
 
 using StringTools;
 
@@ -297,6 +298,7 @@ class MobileControlSelectSubState extends MusicBeatSubstate
 						button.visible = button.active = false;
 				});
 		}
+		control.alpha = 1;
 		updatePosText();
 		setOptionText();
 	}
