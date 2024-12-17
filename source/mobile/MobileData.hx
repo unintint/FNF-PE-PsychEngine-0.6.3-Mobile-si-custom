@@ -49,8 +49,6 @@ class MobileData
 	public static var forcedMode:Null<Int>;
 	public static var save:FlxSave;
 
-	static var arrowHSV:Array<Array<Int>> = [[0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]];
-
 	public static function init()
 	{
 		save = new FlxSave();
