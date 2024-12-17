@@ -1097,6 +1097,8 @@ class PlayState extends MusicBeatState
 		touchPad.visible = true;
 		#end
 		addMobileControls();
+		mobileControls.onButtonDown.add(onButtonPress);
+		mobileControls.onButtonUp.add(onButtonRelease);
 
 		generateSong(SONG.song);
 
@@ -3435,7 +3437,6 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	// MTODO(?)
 	public function getControl(key:String) {
 		var pressed:Bool = Reflect.getProperty(controls, key);
 		//trace('Control result: ' + pressed);
@@ -4453,8 +4454,29 @@ class PlayState extends MusicBeatState
 		return -1;
 	}
 
-	// Hold notes
 	// MTODO
+	private function onButtonPress(button:TouchButton):Void
+	{
+
+	}
+
+	// MTODO
+	private function onButtonRelease(button:TouchButton):Void
+	{
+		//var buttonCode:Int = MobileButtonsList.createAll().indexOf(button.id[0].getName().startsWith('NOTE') ? button.id[0] : button.id[1]);
+
+		if (!cpuControlled && startedCountdown && !paused && buttonCode > -1)
+		{
+			var spr:StrumNote = playerStrums.members[buttonCode];
+			if (spr != null)
+			{
+				spr.playAnim('static');
+				spr.resetAnim = 0;
+			}
+		}
+	}
+
+	// Hold notes
 	private function keyShit():Void
 	{
 		// HOLDING
