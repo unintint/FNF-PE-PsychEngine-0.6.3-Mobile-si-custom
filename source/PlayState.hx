@@ -4367,7 +4367,7 @@ class PlayState extends MusicBeatState
 					{
 						for (doubleNote in pressNotes) {
 							if (Math.abs(doubleNote.strumTime - epicNote.strumTime) < 1) {
-								//doubleNote.kill();
+								if (!ClientPrefs.lowQuality || !cpuControlled) doubleNote.kill();
 								notes.remove(doubleNote, true);
 								doubleNote.destroy();
 							} else
@@ -4504,7 +4504,7 @@ class PlayState extends MusicBeatState
 						{
 							if (Math.abs(doubleNote.strumTime - epicNote.strumTime) < 1)
 							{
-								// doubleNote.kill();
+								if (!ClientPrefs.lowQuality || !cpuControlled) doubleNote.kill();
 								notes.remove(doubleNote, true);
 								doubleNote.destroy();
 							}

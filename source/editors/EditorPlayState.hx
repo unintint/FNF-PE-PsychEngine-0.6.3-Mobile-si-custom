@@ -475,7 +475,7 @@ class EditorPlayState extends MusicBeatState
 
 					if (!daNote.isSustainNote)
 					{
-						//daNote.kill();
+						if (!ClientPrefs.lowQuality || !cpuControlled) daNote.kill();
 						notes.remove(daNote, true);
 						daNote.destroy();
 					}
@@ -490,7 +490,7 @@ class EditorPlayState extends MusicBeatState
 							//Dupe note remove
 							notes.forEachAlive(function(note:Note) {
 								if (daNote != note && daNote.mustPress && daNote.noteData == note.noteData && daNote.isSustainNote == note.isSustainNote && Math.abs(daNote.strumTime - note.strumTime) < 10) {
-									//note.kill();
+									if (!ClientPrefs.lowQuality || !cpuControlled) note.kill();
 									notes.remove(note, true);
 									note.destroy();
 								}
@@ -506,7 +506,7 @@ class EditorPlayState extends MusicBeatState
 					daNote.active = false;
 					daNote.visible = false;
 
-					//daNote.kill();
+					if (!ClientPrefs.lowQuality || !cpuControlled) daNote.kill();
 					notes.remove(daNote, true);
 					daNote.destroy();
 				}
@@ -605,7 +605,7 @@ class EditorPlayState extends MusicBeatState
 					{
 						for (doubleNote in pressNotes) {
 							if (Math.abs(doubleNote.strumTime - epicNote.strumTime) < 1) {
-								//doubleNote.kill();
+								if (!ClientPrefs.lowQuality || !cpuControlled) doubleNote.kill();
 								notes.remove(doubleNote, true);
 								doubleNote.destroy();
 							} else
@@ -721,7 +721,7 @@ class EditorPlayState extends MusicBeatState
 					{
 						for (doubleNote in pressNotes) {
 							if (Math.abs(doubleNote.strumTime - epicNote.strumTime) < 1) {
-								//doubleNote.kill();
+								if (!ClientPrefs.lowQuality || !cpuControlled) doubleNote.kill();
 								notes.remove(doubleNote, true);
 								doubleNote.destroy();
 							} else
@@ -840,7 +840,7 @@ class EditorPlayState extends MusicBeatState
 
 					if (!note.isSustainNote)
 					{
-						//note.kill();
+						if (!ClientPrefs.lowQuality || !cpuControlled) note.kill();
 						notes.remove(note, true);
 						note.destroy();
 					}
@@ -868,7 +868,7 @@ class EditorPlayState extends MusicBeatState
 
 			if (!note.isSustainNote)
 			{
-				//note.kill();
+				if (!ClientPrefs.lowQuality || !cpuControlled) note.kill();
 				notes.remove(note, true);
 				note.destroy();
 			}
