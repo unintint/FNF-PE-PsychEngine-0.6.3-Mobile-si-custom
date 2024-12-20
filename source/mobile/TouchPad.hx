@@ -142,6 +142,8 @@ class TouchPad extends MobileInputManager implements IMobileControls
 	override public function destroy()
 	{
 		super.destroy();
+		onButtonUp.destroy();
+		onButtonDown.destroy();
 
 		for (fieldName in Reflect.fields(this))
 		{
