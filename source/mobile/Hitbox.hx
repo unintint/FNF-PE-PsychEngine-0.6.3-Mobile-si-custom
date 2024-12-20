@@ -118,8 +118,8 @@ class Hitbox extends MobileInputManager implements IMobileControls
 	override function destroy()
 	{
 		super.destroy();
-		onButtonUp.destroy();
-		onButtonDown.destroy();
+		FlxDestroyUtil.destroy(onButtonUp);
+		FlxDestroyUtil.destroy(onButtonDown);
 
 		for (fieldName in Reflect.fields(this))
 		{
