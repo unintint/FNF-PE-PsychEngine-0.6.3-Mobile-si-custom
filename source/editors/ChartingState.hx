@@ -1579,34 +1579,37 @@ class ChartingState extends MusicBeatState
 		FlxG.watch.addQuick('daStep', curStep);
 
 
-		if (controls.mobileC) {
-		for (touch in FlxG.touches.list)
+		if (controls.mobileC)
 		{
-			if (touch.x > gridBG.x
-				&& touch.x < gridBG.x + gridBG.width
-				&& touch.y > gridBG.y
-				&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+			for (touch in FlxG.touches.list)
 			{
-				dummyArrow.visible = true;
-				dummyArrow.x = Math.floor(touch.x / GRID_SIZE) * GRID_SIZE;
-				if (touchPad.buttonY.pressed || FlxG.keys.pressed.SHIFT)
-					dummyArrow.y = touch.y;
+				if (touch.x > gridBG.x
+					&& touch.x < gridBG.x + gridBG.width
+					&& touch.y > gridBG.y
+					&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+				{
+					dummyArrow.visible = true;
+					dummyArrow.x = Math.floor(touch.x / GRID_SIZE) * GRID_SIZE;
+					if (touchPad.buttonY.pressed || FlxG.keys.pressed.SHIFT)
+						dummyArrow.y = touch.y;
+					else
+					{
+						var gridmult = GRID_SIZE / (quantization / 16);
+						dummyArrow.y = Math.floor(touch.y / gridmult) * gridmult;
+					}
+				}
 				else
 				{
-					var gridmult = GRID_SIZE / (quantization / 16);
-					dummyArrow.y = Math.floor(touch.y / gridmult) * gridmult;
+					dummyArrow.visible = false;
 				}
-			} else {
-				dummyArrow.visible = false;
-			}
 
-			if (touch.justPressed)
-			{
-				if (touch.overlaps(curRenderedNotes))
+				if (touch.justPressed)
 				{
-					curRenderedNotes.forEachAlive(function(note:Note)
+					if (touch.overlaps(curRenderedNotes))
 					{
-						if (touch.overlaps(note))
+						curRenderedNotes.forEachAlive(function(note:Note)
+						{
+							if (touch.overlaps(note))
 							{
 								if (touchPad.buttonF.pressed)
 								{
@@ -1620,83 +1623,86 @@ class ChartingState extends MusicBeatState
 								}
 								else
 								{
-									//trace('tryin to delete note...');
+									// trace('tryin to delete note...');
 									deleteNote(note);
 								}
 							}
+						});
+					}
+					else if (!touchPad.buttonF.pressed)
+					{
+						if (touch.x > gridBG.x
+							&& touch.x < gridBG.x + gridBG.width
+							&& touch.y > gridBG.y
+							&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+						{
+							FlxG.log.add('added note');
+							addNote();
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			if (FlxG.mouse.x > gridBG.x
+				&& FlxG.mouse.x < gridBG.x + gridBG.width
+				&& FlxG.mouse.y > gridBG.y
+				&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+			{
+				dummyArrow.visible = true;
+				dummyArrow.x = Math.floor(FlxG.mouse.x / GRID_SIZE) * GRID_SIZE;
+				if (FlxG.keys.pressed.SHIFT)
+					dummyArrow.y = FlxG.mouse.y;
+				else
+				{
+					var gridmult = GRID_SIZE / (quantization / 16);
+					dummyArrow.y = Math.floor(FlxG.mouse.y / gridmult) * gridmult;
+				}
+			}
+			else
+			{
+				dummyArrow.visible = false;
+			}
+
+			if (FlxG.mouse.justPressed)
+			{
+				if (FlxG.mouse.overlaps(curRenderedNotes))
+				{
+					curRenderedNotes.forEachAlive(function(note:Note)
+					{
+						if (FlxG.mouse.overlaps(note))
+						{
+							if (FlxG.keys.pressed.CONTROL)
+							{
+								selectNote(note);
+							}
+							else if (FlxG.keys.pressed.ALT)
+							{
+								selectNote(note);
+								curSelectedNote[3] = noteTypeIntMap.get(currentType);
+								updateGrid();
+							}
+							else
+							{
+								// trace('tryin to delete note...');
+								deleteNote(note);
+							}
+						}
 					});
 				}
-				else if (!touchPad.buttonF.pressed)
+				else
 				{
-					if (touch.x > gridBG.x
-						&& touch.x < gridBG.x + gridBG.width
-						&& touch.y > gridBG.y
-						&& touch.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+					if (FlxG.mouse.x > gridBG.x
+						&& FlxG.mouse.x < gridBG.x + gridBG.width
+						&& FlxG.mouse.y > gridBG.y
+						&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
 					{
 						FlxG.log.add('added note');
 						addNote();
 					}
 				}
 			}
-		}
-		} else {
-
-		if (FlxG.mouse.x > gridBG.x
-			&& FlxG.mouse.x < gridBG.x + gridBG.width
-			&& FlxG.mouse.y > gridBG.y
-			&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
-		{
-			dummyArrow.visible = true;
-			dummyArrow.x = Math.floor(FlxG.mouse.x / GRID_SIZE) * GRID_SIZE;
-			if (FlxG.keys.pressed.SHIFT)
-				dummyArrow.y = FlxG.mouse.y;
-			else
-			{
-				var gridmult = GRID_SIZE / (quantization / 16);
-				dummyArrow.y = Math.floor(FlxG.mouse.y / gridmult) * gridmult;
-			}
-		} else {
-			dummyArrow.visible = false;
-		}
-
-		if (FlxG.mouse.justPressed)
-		{
-			if (FlxG.mouse.overlaps(curRenderedNotes))
-			{
-				curRenderedNotes.forEachAlive(function(note:Note)
-				{
-					if (FlxG.mouse.overlaps(note))
-					{
-						if (FlxG.keys.pressed.CONTROL)
-						{
-							selectNote(note);
-						}
-						else if (FlxG.keys.pressed.ALT)
-						{
-							selectNote(note);
-							curSelectedNote[3] = noteTypeIntMap.get(currentType);
-							updateGrid();
-						}
-						else
-						{
-							//trace('tryin to delete note...');
-							deleteNote(note);
-						}
-					}
-				});
-			}
-			else
-			{
-				if (FlxG.mouse.x > gridBG.x
-					&& FlxG.mouse.x < gridBG.x + gridBG.width
-					&& FlxG.mouse.y > gridBG.y
-					&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
-				{
-					FlxG.log.add('added note');
-					addNote();
-				}
-			}
-		}
 		}
 
 		var blockInput:Bool = false;

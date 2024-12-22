@@ -202,7 +202,7 @@ class FreeplayState extends MusicBeatState
 		text.scrollFactor.set();
 		add(text);
 
-        addTouchPad("LEFT_FULL", "A_B_C_X_Y_Z");
+		addTouchPad("LEFT_FULL", "A_B_C_X_Y_Z");
 
 		super.create();
 	}
