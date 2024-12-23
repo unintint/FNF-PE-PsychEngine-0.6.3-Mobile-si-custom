@@ -54,7 +54,7 @@ class FPS extends TextField
 	{
 		super();
 
-		#if officialBuild
+		#if !officialBuild
 		os = '\nOS: ${LimeSystem.platformName} ${getArch() != 'Unknown' ? getArch() : ''} ${(LimeSystem.platformName == LimeSystem.platformVersion || LimeSystem.platformVersion == null) ? '' : '- ' + LimeSystem.platformVersion}';
 		#end
 
