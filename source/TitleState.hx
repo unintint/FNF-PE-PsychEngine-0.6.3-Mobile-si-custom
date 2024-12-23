@@ -338,14 +338,14 @@ class TitleState extends MusicBeatState
 
 		titleText = new FlxSprite(titleJSON.startx, titleJSON.starty);
 		#if MODS_ALLOWED
-		var path = "mods/" + Paths.currentModDirectory + "/images/titleEnter.png";
+		var path = #if mobile Sys.getCwd() + #end "mods/" + Paths.currentModDirectory + "/images/titleEnter.png";
 		//trace(path, FileSystem.exists(path));
 		if (!FileSystem.exists(path)){
-			path = "mods/images/titleEnter.png";
+			path = #if mobile Sys.getCwd() + #end "mods/images/titleEnter.png";
 		}
 		//trace(path, FileSystem.exists(path));
 		if (!FileSystem.exists(path)){
-			path = "assets/images/titleEnter.png";
+			path = #if mobile Sys.getCwd() + #end "assets/images/titleEnter.png";
 		}
 		//trace(path, FileSystem.exists(path));
 		titleText.frames = FlxAtlasFrames.fromSparrow(BitmapData.fromFile(path),File.getContent(StringTools.replace(path,".png",".xml")));
