@@ -894,7 +894,11 @@ class PlayState extends MusicBeatState
 		{
 			if(FileSystem.exists(folder))
 			{
+				#if (android || linux)
+				for (file in CoolUtil.sortAlphabetically(Paths.readDirectory(folder)))
+				#else
 				for (file in Paths.readDirectory(folder))
+				#end
 				{
 					if(file.endsWith('.lua') && !filesPushed.contains(file))
 					{
@@ -1276,7 +1280,11 @@ class PlayState extends MusicBeatState
 		{
 			if(FileSystem.exists(folder))
 			{
+				#if (android || linux)
+				for (file in CoolUtil.sortAlphabetically(Paths.readDirectory(folder)))
+				#else
 				for (file in Paths.readDirectory(folder))
+				#end
 				{
 					if(file.endsWith('.lua') && !filesPushed.contains(file))
 					{
