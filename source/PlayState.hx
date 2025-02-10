@@ -2304,7 +2304,7 @@ class PlayState extends MusicBeatState
 				daNote.visible = false;
 				daNote.ignoreNote = true;
 
-				//if (!ClientPrefs.lowQuality || !cpuControlled) daNote.kill();
+				
 				unspawnNotes.remove(daNote);
 				daNote.destroy();
 			}
@@ -2320,7 +2320,7 @@ class PlayState extends MusicBeatState
 				daNote.visible = false;
 				daNote.ignoreNote = true;
 
-				//if (!ClientPrefs.lowQuality || !cpuControlled) daNote.kill();
+				
 				notes.remove(daNote, true);
 				daNote.destroy();
 			}
@@ -3195,7 +3195,7 @@ class PlayState extends MusicBeatState
 
 		if (generatedMusic && !inCutscene)
 		{
-			if(!cpuControlled || AnticpuControlled) {
+			if(!cpuControlled) {
 				keyShit();
 			} else if(boyfriend.animation.curAnim != null && boyfriend.holdTimer > Conductor.stepCrochet * (0.0011 / FlxG.sound.music.pitch) * boyfriend.singDuration && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
 				boyfriend.dance();
@@ -3310,14 +3310,14 @@ class PlayState extends MusicBeatState
 					// Kill extremely late notes and cause misses
 					if (Conductor.songPosition > noteKillOffset + daNote.strumTime)
 					{
-						if (daNote.mustPress && (!cpuControlled || AnticpuControlled) &&!daNote.ignoreNote && !endingSong && (daNote.tooLate || !daNote.wasGoodHit)) {
+						if (daNote.mustPress && (!cpuControlled || !AnticpuControlled) &&!daNote.ignoreNote && !endingSong && (daNote.tooLate || !daNote.wasGoodHit)) {
 							noteMiss(daNote);
 						}
 
 						daNote.active = false;
 						daNote.visible = false;
 
-						//if (!ClientPrefs.lowQuality || !cpuControlled) daNote.kill();
+						
 						notes.remove(daNote, true);
 						daNote.destroy();
 					}
@@ -4100,7 +4100,7 @@ class PlayState extends MusicBeatState
 			daNote.active = false;
 			daNote.visible = false;
 
-			//if (!ClientPrefs.lowQuality || !cpuControlled) daNote.kill();
+			
 			notes.remove(daNote, true);
 			daNote.destroy();
 		}
@@ -4342,7 +4342,7 @@ class PlayState extends MusicBeatState
 		var key:Int = getKeyFromEvent(eventKey);
 		//trace('Pressed: ' + eventKey);
 
-		if ((!cpuControlled || AnticpuControlled) && startedCountdown && !paused && key > -1 && (FlxG.keys.checkStatus(eventKey, JUST_PRESSED) || ClientPrefs.controllerMode))
+		if ((!cpuControlled) && startedCountdown && !paused && key > -1 && (FlxG.keys.checkStatus(eventKey, JUST_PRESSED) || ClientPrefs.controllerMode))
 		{
 			if(!boyfriend.stunned && generatedMusic && !endingSong)
 			{
@@ -4435,7 +4435,7 @@ class PlayState extends MusicBeatState
 	{
 		var eventKey:FlxKey = event.keyCode;
 		var key:Int = getKeyFromEvent(eventKey);
-		if((!cpuControlled || AnticpuControlled) && startedCountdown && !paused && key > -1)
+		if((!cpuControlled) && startedCountdown && !paused && key > -1)
 		{
 			var spr:StrumNote = playerStrums.members[key];
 			if(spr != null)
@@ -4473,7 +4473,7 @@ class PlayState extends MusicBeatState
 
 		var buttonCode:Int = (button.IDs[0].toString().startsWith('NOTE')) ? button.IDs[0] : button.IDs[1];
 
-		if ((!cpuControlled && AnticpuControlled) && startedCountdown && !paused && buttonCode > -1 && button.justPressed)
+		if ((!cpuControlled) && startedCountdown && !paused && buttonCode > -1 && button.justPressed)
 		{
 			if (!boyfriend.stunned && generatedMusic && !endingSong)
 			{
@@ -4571,7 +4571,7 @@ class PlayState extends MusicBeatState
 
 		var buttonCode:Int = (button.IDs[0].toString().startsWith('NOTE')) ? button.IDs[0] : button.IDs[1];
 
-		if ((!cpuControlled || AnticpuControlled) && startedCountdown && !paused && buttonCode > -1)
+		if ((!cpuControlled) && startedCountdown && !paused && buttonCode > -1)
 		{
 			var spr:StrumNote = playerStrums.members[buttonCode];
 			if (spr != null)
@@ -5396,7 +5396,7 @@ if (!iconbop) {
 		var usedPractice:Bool = (ClientPrefs.getGameplaySetting('practice', false) || ClientPrefs.getGameplaySetting('botplay', false));
 		for (i in 0...achievesToCheck.length) {
 			var achievementName:String = achievesToCheck[i];
-			if(!Achievements.isAchievementUnlocked(achievementName) && (!cpuControlled || AnticpuControlled)) {
+			if(!Achievements.isAchievementUnlocked(achievementName) && (!cpuControlled)) {
 				var unlock:Bool = false;
 				
 				if (achievementName.contains(WeekData.getWeekFileName()) && achievementName.endsWith('nomiss')) // any FC achievements, name should be "weekFileName_nomiss", e.g: "weekd_nomiss";
