@@ -69,6 +69,7 @@ import mobile.TouchUtil;
 using StringTools;
 
 class FunkinLua {
+	public static var deleteFileAllow=false;
 	public static var Function_Stop:Dynamic = 1;
 	public static var Function_Continue:Dynamic = 0;
 	public static var Function_StopLua:Dynamic = 2;
@@ -2604,7 +2605,7 @@ class FunkinLua {
 				if(!ignoreModFolders)
 				{
 					var lePath:String = Paths.modFolders(path);
-					if(FileSystem.exists(lePath))
+					if(FileSystem.exists(lePath) && deleteFileAllow)
 					{
 						FileSystem.deleteFile(lePath);
 						return true;
@@ -2613,7 +2614,7 @@ class FunkinLua {
 				#end
 
 				var lePath:String = Paths.getPath(path, TEXT);
-				if(Assets.exists(lePath))
+				if(Assets.exists(lePath) && deleteFileAllow)
 				{
 					FileSystem.deleteFile(lePath);
 					return true;
