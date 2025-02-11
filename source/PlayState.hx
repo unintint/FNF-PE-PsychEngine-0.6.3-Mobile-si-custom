@@ -210,13 +210,15 @@ class PlayState extends MusicBeatState
 	public var healthLoss:Float = 1;
 	public var instakillOnMiss:Bool = false;
 	public var AnticpuControlled:Bool = false;
+	public var AnticpuControlledDelay:Float =0:
+        public var iscanmissnote:Bool =true;
 	public var cpuControlled:Bool = false;
 	public var practiceMode:Bool = false;
 
 	public var botplaySine:Float = 0;
 	public var botplayTxt:FlxText;
 
-	public var iconbop:Bool=false;
+	public var iconbop:Bool=true;
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
 	public var camHUD:FlxCamera;
@@ -3304,7 +3306,7 @@ class PlayState extends MusicBeatState
 							if(daNote.canBeHit) {
 								goodNoteHit(daNote);
 							}
-						} else if(daNote.strumTime <= Conductor.songPosition || daNote.isSustainNote) {
+						} else if(daNote.strumTime <= (Conductor.songPosition + AnticpuControlledDelay) || daNote.isSustainNote) {
 							goodNoteHit(daNote);
 						}
 					}
@@ -3340,7 +3342,7 @@ class PlayState extends MusicBeatState
 					// Kill extremely late notes and cause misses
 					if (Conductor.songPosition > noteKillOffset + daNote.strumTime)
 					{
-						if (daNote.mustPress && (!cpuControlled || !AnticpuControlled) &&!daNote.ignoreNote && !endingSong && (daNote.tooLate || !daNote.wasGoodHit)) {
+						if (daNote.mustPress && (!cpuControlled) &&!daNote.ignoreNote && !endingSong && (daNote.tooLate || !daNote.wasGoodHit)) {
 							noteMiss(daNote);
 						}
 
@@ -4688,6 +4690,7 @@ class PlayState extends MusicBeatState
 	}
 
 	function noteMiss(daNote:Note):Void { //You didn't hit the key and let it go offscreen, also used by Hurt Notes
+		
 		//Dupe note remove
 		notes.forEachAlive(function(note:Note) {
 			if (daNote != note && daNote.mustPress && daNote.noteData == note.noteData && daNote.isSustainNote == note.isSustainNote && Math.abs(daNote.strumTime - note.strumTime) < 1) {
@@ -4696,6 +4699,7 @@ class PlayState extends MusicBeatState
 				note.destroy();
 			}
 		});
+		if (iscanmissnote) {
 		combo = 0;
 		health -= daNote.missHealth * healthLoss;
 		
@@ -4726,6 +4730,7 @@ class PlayState extends MusicBeatState
 		}
 
 		callOnLuas('noteMiss', [notes.members.indexOf(daNote), daNote.noteData, daNote.noteType, daNote.isSustainNote]);
+	}
 	}
 
 	function noteMissPress(direction:Int = 1):Void //You pressed a key when there was no notes to press for this key
@@ -5209,7 +5214,7 @@ class PlayState extends MusicBeatState
 		{
 			notes.sort(FlxSort.byY, ClientPrefs.downScroll ? FlxSort.ASCENDING : FlxSort.DESCENDING);
 		}
-if (!iconbop) {
+if (iconbop) {
 		iconP1.scale.set(1.2, 1.2);
 		iconP2.scale.set(1.2, 1.2);
 }
