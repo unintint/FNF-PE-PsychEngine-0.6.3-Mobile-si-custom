@@ -210,7 +210,7 @@ class PlayState extends MusicBeatState
 	public var healthLoss:Float = 1;
 	public var instakillOnMiss:Bool = false;
 	public var AnticpuControlled:Bool = false;
-	public var AnticpuControlledDelay:Float =0:
+	public var AnticpuControlledDelay:Float =0;
         public var iscanmissnote:Bool =true;
 	public var cpuControlled:Bool = false;
 	public var practiceMode:Bool = false;
