@@ -24,6 +24,11 @@
       "version": "4.11.0"
     },
     {
+      "name": "lime",
+      "type": "haxelib",
+      "version": "8.1.3"
+    },
+    {
       "name": "flixel-addons",
       "type": "haxelib",
       "version": "2.11.0"
@@ -49,12 +54,6 @@
       "type": "git",
       "ref": "master",
       "url": "https://github.com/mcagabe19-stuff/hxcpp"
-    },
-    {
-      "name": "lime",
-      "type": "git",
-      "ref": "main",
-      "url": "https://github.com/mcagabe19-stuff/lime"
     },
     {
       "name": "openfl",
