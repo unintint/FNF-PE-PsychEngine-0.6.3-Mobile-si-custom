@@ -3300,21 +3300,14 @@ class PlayState extends MusicBeatState
 						}
 					}
 
-					if (!daNote.mustPress && daNote.wasGoodHit && !daNote.hitByOpponent && !daNote.ignoreNote)
-					{
-						opponentNoteHit(daNote);
-					}
 
-					if(!daNote.blockHit && daNote.mustPress && (cpuControlled || AnticpuControlled) && daNote.canBeHit) {
-						if(daNote.isSustainNote) {
-							if(daNote.canBeHit) {
-								goodNoteHit(daNote);
-							}
-						} else if(daNote.strumTime <= (Conductor.songPosition + AnticpuControlledDelay) || daNote.isSustainNote) {
-							goodNoteHit(daNote);
-						}
-					}
-
+if(daNote.mustPress)
+{
+if((cpuControlled || AnticpuControlled) && !daNote.blockHit && daNote.canBeHit && (daNote.isSustainNote || daNote.strumTime <= (Conductor.songPosition+AnticpuControlledDelay)))
+goodNoteHit(daNote);
+}
+else if (daNote.wasGoodHit && !daNote.hitByOpponent && !daNote.ignoreNote)
+opponentNoteHit(daNote);
 					var center:Float = strumY + Note.swagWidth / 2;
 					if(strumGroup.members[daNote.noteData].sustainReduce && daNote.isSustainNote && (daNote.mustPress || !daNote.ignoreNote) &&
 						(!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))))
