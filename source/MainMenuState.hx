@@ -130,7 +130,7 @@ class MainMenuState extends MusicBeatState
 		}
 
 		FlxG.camera.follow(camFollowPos, null, 1);
-		var versionShit:FlxText = new FlxText(12, FlxG.height - 64, 0, "Tiny Edtion" + tinyEdtionVersion, 12);
+		var versionShit:FlxText = new FlxText(12, FlxG.height - 64, 0, "Tiny Edtion v" + tinyEdtionVersion, 12);
 		versionShit.scrollFactor.set();
 		var versionShit:FlxText = new FlxText(12, FlxG.height - 44, 0, "Psych Engine v" + psychEngineVersion, 12);
 		versionShit.scrollFactor.set();
