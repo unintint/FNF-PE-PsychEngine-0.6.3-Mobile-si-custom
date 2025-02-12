@@ -106,7 +106,7 @@ class FPS extends TextField
 			#if openfl
 			memoryMegas = Math.abs(FlxMath.roundDecimal(#if cpp cpp.vm.Gc.memInfo64(cpp.vm.Gc.MEM_INFO_USAGE) #else System.totalMemory #end / 1000000, 1));
 			text += "\nMemory: " + memoryMegas + " MB";
-			text += "\nTiny Edtion v";
+			text += "\nTiny Edtion v" + MainMenuState.tinyEdtionVersion;
 			#end
 
 			text += os;
