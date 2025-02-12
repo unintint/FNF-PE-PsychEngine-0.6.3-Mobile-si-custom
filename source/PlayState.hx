@@ -3184,7 +3184,7 @@ class PlayState extends MusicBeatState
 					if(ClientPrefs.timeBarType == 'Time Left') timeTxt.text = FlxStringUtil.formatTime(secondsTotal, false);
 					if(ClientPrefs.timeBarType == 'SongName + Time Left') 
 					{
-						timeTxt.text = '(' + SONG.song + ')' + FlxStringUtil.formatTime(secondsTotal, false);
+						timeTxt.text = SONG.song + '(' + FlxStringUtil.formatTime(secondsTotal, false) + ')';
 						timeBar.color=FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]);
 					}
 				}
