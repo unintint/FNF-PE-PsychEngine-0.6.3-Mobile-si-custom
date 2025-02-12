@@ -16,7 +16,7 @@ class ClientPrefs {
 	public static var storageType:String = "EXTERNAL_DATA";
 	#end
 	public static var hitboxType:String = "Gradient";
-	public static var popUpRating:Bool = true;
+	public static var popUpRating:Bool = false;
 	public static var vsync:Bool = false;
 	public static var gameOverVibration:Bool = false;
 
