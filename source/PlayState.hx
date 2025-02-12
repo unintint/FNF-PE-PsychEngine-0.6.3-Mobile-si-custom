@@ -5371,6 +5371,7 @@ if (iconbop) {
 
 	public var ratingName:String = '?';
 	public var ratingPercent:Float;
+	public var ratingPercentstopRecalculateRating:Bool =false;
 	public var ratingFC:String;
 	public function RecalculateRating(badHit:Bool = false) {
 		setOnLuas('score', songScore);
@@ -5385,7 +5386,7 @@ if (iconbop) {
 			else
 			{
 				// Rating Percent
-				ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
+				if (!ratingPercentstopRecalculateRating) ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
 				//trace((totalNotesHit / totalPlayed) + ', Total: ' + totalPlayed + ', notes hit: ' + totalNotesHit);
 
 				// Rating Name
