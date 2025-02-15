@@ -4174,10 +4174,10 @@ opponentNoteHit(daNote);
 		vocals.volume = 1;
 
 		var placement:String = Std.string(combo);
-
-		var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
-		coolText.screenCenter();
-		coolText.x = FlxG.width * 0.35;
+var coolTextX:Float=FlxG.width * 0.35:
+		//var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
+		//coolText.screenCenter();
+		//coolText.x = FlxG.width * 0.35;
 		//
 
 		var rating:FlxSprite = new FlxSprite();
@@ -4220,7 +4220,7 @@ opponentNoteHit(daNote);
 		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating.image + pixelShitPart2));
 		rating.cameras = [camHUD];
 		rating.screenCenter();
-		rating.x = coolText.x - 40;
+		rating.x = coolTextX - 40;
 		rating.y -= 60;
 		rating.acceleration.y = 550 * playbackRate * playbackRate;
 		rating.velocity.y -= FlxG.random.int(140, 175) * playbackRate;
@@ -4232,7 +4232,7 @@ opponentNoteHit(daNote);
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
 		comboSpr.cameras = [camHUD];
 		comboSpr.screenCenter();
-		comboSpr.x = coolText.x;
+		comboSpr.x = coolTextX;
 		comboSpr.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
 		comboSpr.velocity.y -= FlxG.random.int(140, 160) * playbackRate;
 		comboSpr.visible = (!ClientPrefs.hideHud && showCombo);
@@ -4298,7 +4298,7 @@ opponentNoteHit(daNote);
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'num' + Std.int(i) + pixelShitPart2));
 			numScore.cameras = [camHUD];
 			numScore.screenCenter();
-			numScore.x = coolText.x + (43 * daLoop) - 90;
+			numScore.x = coolTextX + (43 * daLoop) - 90;
 			numScore.y += 80;
 
 			numScore.x += ClientPrefs.comboOffset[2];
@@ -4344,7 +4344,7 @@ opponentNoteHit(daNote);
 			trace(seperatedScore);
 		 */
 
-		coolText.text = Std.string(seperatedScore);
+		//coolText.text = Std.string(seperatedScore);
 		// add(coolText);
 
 		FlxTween.tween(rating, {alpha: 0}, 0.2 / playbackRate, {
@@ -4354,7 +4354,7 @@ opponentNoteHit(daNote);
 		FlxTween.tween(comboSpr, {alpha: 0}, 0.2 / playbackRate, {
 			onComplete: function(tween:FlxTween)
 			{
-				coolText.destroy();
+				//coolText.destroy();
 				comboSpr.destroy();
 
 				rating.destroy();
@@ -4873,10 +4873,8 @@ opponentNoteHit(daNote);
 				popUpScore(note);
 			}
 			health += note.hitHealth * healthGain;
-
 			if(!note.noAnimation) {
 				var animToPlay:String = singAnimations[Std.int(Math.abs(note.noteData))];
-
 				if(note.gfNote)
 				{
 					if(gf != null)
@@ -4890,14 +4888,12 @@ opponentNoteHit(daNote);
 					boyfriend.playAnim(animToPlay + note.animSuffix, true);
 					boyfriend.holdTimer = 0;
 				}
-
 				if(note.noteType == 'Hey!') {
 					if(boyfriend.animOffsets.exists('hey')) {
 						boyfriend.playAnim('hey', true);
 						boyfriend.specialAnim = true;
 						boyfriend.heyTimer = 0.6;
 					}
-
 					if(gf != null && gf.animOffsets.exists('cheer')) {
 						gf.playAnim('cheer', true);
 						gf.specialAnim = true;
@@ -4905,7 +4901,6 @@ opponentNoteHit(daNote);
 					}
 				}
 			}
-
 			if(cpuControlled || AnticpuControlled) {
 				var time:Float = 0.15;
 				if(note.isSustainNote && !note.animation.curAnim.name.endsWith('end')) {
@@ -4921,8 +4916,7 @@ opponentNoteHit(daNote);
 			}
 			note.wasGoodHit = true;
 			vocals.volume = 1;
-
-			var isSus:Bool = note.isSustainNote; //GET OUT OF MY HEAD, GET OUT OF MY HEAD, GET OUT OF MY HEAD
+			var isSus:Bool = note.isSustainNote;
 			var leData:Int = Math.round(Math.abs(note.noteData));
 			var leType:String = note.noteType;
 			callOnLuas('goodNoteHit', [notes.members.indexOf(note), leData, leType, isSus]);
