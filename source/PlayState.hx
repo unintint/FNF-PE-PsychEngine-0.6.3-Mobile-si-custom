@@ -4174,7 +4174,7 @@ opponentNoteHit(daNote);
 		vocals.volume = 1;
 
 		var placement:String = Std.string(combo);
-var coolTextX:Float=FlxG.width * 0.35:
+var coolTextX:Float=FlxG.width * 0.35;
 		//var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 		//coolText.screenCenter();
 		//coolText.x = FlxG.width * 0.35;
