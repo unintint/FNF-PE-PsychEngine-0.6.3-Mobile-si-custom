@@ -2362,12 +2362,8 @@ class PlayState extends MusicBeatState
 
 	public function updateScore(miss:Bool = false)
 	{
-		scoreTxt.text = 'Score: ' + songScore
-		+ ' | Misses: ' + songMisses
-		+ ' | Rating: ' + ratingName
-		+ (ratingName != '?' ? ' (${Highscore.floorDecimal(ratingPercent * 100, 2)}%) - $ratingFC' : '');
-
-		if(ClientPrefs.scoreZoom && !miss && (!cpuControlled || AnticpuControlled))
+		scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + (ratingName != '?' ? ' (${Highscore.floorDecimal(ratingPercent * 100, 2)}%) - $ratingFC' : '');
+		if(ClientPrefs.scoreZoom && !miss && (!cpuControlled)
 		{
 			if(scoreTxtTween != null) {
 				scoreTxtTween.cancel();
@@ -4168,36 +4164,21 @@ opponentNoteHit(daNote);
 	public function popUpScore(note:Note = null):Void
 	{
 		var noteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.ratingOffset);
-		//trace(noteDiff, ' ' + Math.abs(note.strumTime - Conductor.songPosition));
-
-		// boyfriend.playAnim('hey');
-		vocals.volume = 1;
-
 		var placement:String = Std.string(combo);
 var coolTextX:Float=FlxG.width * 0.35;
-		//var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
-		//coolText.screenCenter();
-		//coolText.x = FlxG.width * 0.35;
-		//
-
 		var rating:FlxSprite = new FlxSprite();
 		var score:Int = 350;
-
-		//tryna do MS based judgment due to popular demand
 		var daRating:Rating = Conductor.judgeNote(note, noteDiff / playbackRate);
-
 		totalNotesHit += daRating.ratingMod;
 		note.ratingMod = daRating.ratingMod;
 		if(!note.ratingDisabled) daRating.increase();
 		note.rating = daRating.name;
 		score = daRating.score;
-
 		if(daRating.noteSplash && !note.noteSplashDisabled)
 		{
 			spawnNoteSplashOnNote(note);
 		}
-
-		if((!practiceMode && !cpuControlled) || AnticpuControlled) {
+		if(!practiceMode && !cpuControlled) {
 			songScore += score;
 			if(!note.ratingDisabled)
 			{
@@ -4206,16 +4187,13 @@ var coolTextX:Float=FlxG.width * 0.35;
 				RecalculateRating(false);
 			}
 		}
-
 		var pixelShitPart1:String = "";
 		var pixelShitPart2:String = '';
-
 		if (PlayState.isPixelStage)
 		{
 			pixelShitPart1 = 'pixelUI/';
 			pixelShitPart2 = '-pixel';
 		}
-
 		if (ClientPrefs.popUpRating) {
 		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating.image + pixelShitPart2));
 		rating.cameras = [camHUD];
@@ -4228,7 +4206,6 @@ var coolTextX:Float=FlxG.width * 0.35;
 		rating.visible = (!ClientPrefs.hideHud && showRating);
 		rating.x += ClientPrefs.comboOffset[0];
 		rating.y -= ClientPrefs.comboOffset[1];
-
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
 		comboSpr.cameras = [camHUD];
 		comboSpr.screenCenter();
@@ -4240,9 +4217,7 @@ var coolTextX:Float=FlxG.width * 0.35;
 		comboSpr.y -= ClientPrefs.comboOffset[1];
 		comboSpr.y += 60;
 		comboSpr.velocity.x += FlxG.random.int(1, 10) * playbackRate;
-
 		insert(members.indexOf(strumLineNotes), rating);
-		
 		if (!ClientPrefs.comboStacking)
 		{
 			if (lastRating != null) lastRating.kill();
@@ -4261,19 +4236,15 @@ var coolTextX:Float=FlxG.width * 0.35;
 			rating.setGraphicSize(Std.int(rating.width * daPixelZoom * 0.85));
 			comboSpr.setGraphicSize(Std.int(comboSpr.width * daPixelZoom * 0.85));
 		}
-
 		comboSpr.updateHitbox();
 		rating.updateHitbox();
-
 		var seperatedScore:Array<Int> = [];
-
 		if(combo >= 1000) {
 			seperatedScore.push(Math.floor(combo / 1000) % 10);
 		}
 		seperatedScore.push(Math.floor(combo / 100) % 10);
 		seperatedScore.push(Math.floor(combo / 10) % 10);
 		seperatedScore.push(combo % 10);
-
 		var daLoop:Int = 0;
 		var xThing:Float = 0;
 		if (showCombo)
@@ -4300,10 +4271,8 @@ var coolTextX:Float=FlxG.width * 0.35;
 			numScore.screenCenter();
 			numScore.x = coolTextX + (43 * daLoop) - 90;
 			numScore.y += 80;
-
 			numScore.x += ClientPrefs.comboOffset[2];
 			numScore.y -= ClientPrefs.comboOffset[3];
-			
 			if (!ClientPrefs.comboStacking)
 				lastScore.push(numScore);
 
@@ -4317,7 +4286,6 @@ var coolTextX:Float=FlxG.width * 0.35;
 				numScore.setGraphicSize(Std.int(numScore.width * daPixelZoom));
 			}
 			numScore.updateHitbox();
-
 			numScore.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
 			numScore.velocity.y -= FlxG.random.int(140, 160) * playbackRate;
 			numScore.velocity.x = FlxG.random.float(-5, 5) * playbackRate;
@@ -4334,18 +4302,10 @@ var coolTextX:Float=FlxG.width * 0.35;
 				},
 				startDelay: Conductor.crochet * 0.002 / playbackRate
 			});
-
 			daLoop++;
 			if(numScore.x > xThing) xThing = numScore.x;
 		}
 		comboSpr.x = xThing + 50;
-		/*
-			trace(combo);
-			trace(seperatedScore);
-		 */
-
-		//coolText.text = Std.string(seperatedScore);
-		// add(coolText);
 
 		FlxTween.tween(rating, {alpha: 0}, 0.2 / playbackRate, {
 			startDelay: Conductor.crochet * 0.001 / playbackRate
@@ -4354,9 +4314,7 @@ var coolTextX:Float=FlxG.width * 0.35;
 		FlxTween.tween(comboSpr, {alpha: 0}, 0.2 / playbackRate, {
 			onComplete: function(tween:FlxTween)
 			{
-				//coolText.destroy();
 				comboSpr.destroy();
-
 				rating.destroy();
 			},
 			startDelay: Conductor.crochet * 0.002 / playbackRate
@@ -5348,7 +5306,6 @@ if (iconbop) {
 		}
 		#end
 	}
-
 	function StrumPlayAnim(isDad:Bool, id:Int, time:Float) {
 		var spr:StrumNote = null;
 		if(isDad) {
@@ -5362,7 +5319,6 @@ if (iconbop) {
 			spr.resetAnim = time;
 		}
 	}
-
 	public var ratingName:String = '?';
 	public var ratingPercent:Float;
 	public var ratingPercentstopRecalculateRating:Bool =false;
@@ -5371,22 +5327,19 @@ if (iconbop) {
 		setOnLuas('score', songScore);
 		setOnLuas('misses', songMisses);
 		setOnLuas('hits', songHits);
-
 		var ret:Dynamic = callOnLuas('onRecalculateRating', [], false);
 		if(ret != FunkinLua.Function_Stop)
 		{
-			if(totalPlayed < 1) //Prevent divide by 0
+			if(totalPlayed < 1)
 				ratingName = '?';
 			else
 			{
 				// Rating Percent
 				if (!ratingPercentstopRecalculateRating) ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
 				//trace((totalNotesHit / totalPlayed) + ', Total: ' + totalPlayed + ', notes hit: ' + totalNotesHit);
-
-				// Rating Name
 				if(ratingPercent >= 1)
 				{
-					ratingName = ratingStuff[ratingStuff.length-1][0]; //Uses last string
+					ratingName = ratingStuff[ratingStuff.length-1][0];
 				}
 				else
 				{
@@ -5400,8 +5353,6 @@ if (iconbop) {
 					}
 				}
 			}
-
-			// Rating FC
 			ratingFC = "";
 			if (sicks > 0) ratingFC = "SFC";
 			if (goods > 0) ratingFC = "GFC";
@@ -5409,17 +5360,15 @@ if (iconbop) {
 			if (songMisses > 0 && songMisses < 10) ratingFC = "SDCB";
 			else if (songMisses >= 10) ratingFC = "Clear";
 		}
-		updateScore(badHit); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce -Ghost
+		updateScore(badHit);
 		setOnLuas('rating', ratingPercent);
 		setOnLuas('ratingName', ratingName);
 		setOnLuas('ratingFC', ratingFC);
 	}
-
 	#if ACHIEVEMENTS_ALLOWED
 	private function checkForAchievement(achievesToCheck:Array<String> = null):String
 	{
 		if(chartingMode) return null;
-
 		var usedPractice:Bool = (ClientPrefs.getGameplaySetting('practice', false) || ClientPrefs.getGameplaySetting('botplay', false));
 		for (i in 0...achievesToCheck.length) {
 			var achievementName:String = achievesToCheck[i];
